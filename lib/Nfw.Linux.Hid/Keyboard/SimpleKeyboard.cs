@@ -172,17 +172,31 @@ namespace Nfw.Linux.Hid.Keyboard {
             return s_charToScanCode.ContainsKey(input) ? s_charToScanCode[input] : s_charToScanCode.ContainsKey(def) ? s_charToScanCode[def] : s_defaultUnknownChar;
         }
         
-        private void WriteKeyboardMessage(IEnumerable<Keys> key, Modifiers modifiers) {            
+        private void WriteKeyboardMessage(IEnumerable<Keys> keys, Modifiers modifiers) {
             try {
-                using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(_devicePath))) {
-                    foreach(IEnumerable<Keys> batch in key.Batch(KEYBOARD_BUFFER_SIZE - FIRST_KEY_INDEX)) {
+                // Empty keys means send modifiers only
+                if (keys == null || !keys.Any()) {
+                    _logger?.LogTrace($"Empty keys, writing modifiers=>{modifiers} only");
+                    using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(_devicePath))) {
                         Array.Clear(_buffer, 0, _buffer.Length);
                         _buffer[MODIFIER_KEY_INDEX] = (byte) modifiers;
-                        for(int x = 0; x < batch.Count() && (FIRST_KEY_INDEX + x < _buffer.Length); x++)
-                            _buffer[FIRST_KEY_INDEX + x] = (byte) batch.ElementAt(x);
                         writer.Write(_buffer, 0, _buffer.Length);
-                        writer.Flush();        
-                    }                    
+                        writer.Flush();
+                    }
+                } else {
+                    _logger?.LogTrace($"Keys has {keys.Count()} elements, in batches of {KEYBOARD_BUFFER_SIZE - FIRST_KEY_INDEX}");
+                    foreach(IEnumerable<Keys> batch in keys.Batch(KEYBOARD_BUFFER_SIZE - FIRST_KEY_INDEX)) {
+                        _logger?.LogTrace($"Batch has {batch.Count()} items");
+                        using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(_devicePath))) {
+                            Array.Clear(_buffer, 0, _buffer.Length);
+                            _buffer[MODIFIER_KEY_INDEX] = (byte) modifiers;
+                            for(int x = 0; x < batch.Count() && (FIRST_KEY_INDEX + x < _buffer.Length); x++) {
+                                _buffer[FIRST_KEY_INDEX + x] = (byte) batch.ElementAt(x);
+                            }
+                            writer.Write(_buffer, 0, _buffer.Length);
+                            writer.Flush();
+                        }
+                    }
                 }
             } catch (Exception ex) {
                 _logger?.LogWarning($"Unable to output to {_devicePath} => {ex.Message}");

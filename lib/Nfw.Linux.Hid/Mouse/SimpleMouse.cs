@@ -80,6 +80,10 @@ namespace Nfw.Linux.Hid.Mouse {
             WriteMouseMessage(_leftButtonToggle, false, x, y, 0, 0);
         }
 
+        public void MoveTo(int x, int y) {
+            WriteMouseMessage(_leftButtonToggle, false, x, y, 0, 0);
+        }
+
         public void ScrollVertical(byte delta) {
             WriteMouseMessage(_leftButtonToggle, false, _currentX, _currentY, delta, 0);
         }
