@@ -57,7 +57,7 @@ Then reboot, and run:
 
 ```bash
 sudo ./init-usb-gadget.sh
-sudo ./install-usb-gadget
+sudo ./install-usb-gadget.sh
 ```
 
 You should end up with /dev/hidg0 and /dev/hidg1 accordingly.
