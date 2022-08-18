@@ -15,7 +15,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>    
     <PackageIcon>keyboard-and-mouse.png</PackageIcon>
     <PackageTags>Linux HID /dev/hidgX USB gadget USBGadget keyboard mouse OTG</PackageTags>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>1.0.1</PackageVersion>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/nate-yocom/Nfw.Linux.Hid</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nate-yocom/Nfw.Linux.Hid.git</RepositoryUrl>    
