@@ -2,7 +2,11 @@
 
 A convenient library for outputting Keyboard and Mouse events via a Linux USB Gadget + OTG + /dev/hidX device.
 
-## Keyboard
+## NuGet
+
+```dotnet add package Nfw.Linux.Hid```
+
+## Sample: Keyboard
 
 ```csharp
 using Nfw.Linux.Hid.Keyboard;
@@ -13,7 +17,7 @@ keyboard.EmitString("test");
 
 You can also use methdos to toggle keys (i.e. 'hold down SHIFT'), send specific keys etc.  ```SendKey``` or the [Events](https://github.com/nate-yocom/Nfw.Linux.Hid/blob/main/lib/Nfw.Linux.Hid/Keyboard/KeyEvents.cs) which can be sent via EmitEvent.
 
-## Mouse
+## Sample: Mouse
 
 ```csharp
 using Nfw.Linux.Hid.Mouse;
