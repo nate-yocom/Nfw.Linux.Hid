@@ -10,8 +10,7 @@ export readonly USB_DEVICE_PATH="${USB_GADGET_PATH}/${USB_DEVICE_DIR}"
 export readonly USB_STRINGS_DIR="strings/0x409"
 export readonly USB_KEYBOARD_FUNCTIONS_DIR="functions/hid.keyboard"
 export readonly USB_MOUSE_FUNCTIONS_DIR="functions/hid.mouse"
-export readonly USB_MASS_STORAGE_NAME="mass_storage.0"
-export readonly USB_MASS_STORAGE_FUNCTIONS_DIR="functions/${USB_MASS_STORAGE_NAME}"
+export readonly USB_JOYSTICK_FUNCTIONS_DIR="functions/hid.joystick"
 
 export readonly USB_CONFIG_INDEX=1
 export readonly USB_CONFIG_DIR="configs/c.${USB_CONFIG_INDEX}"
@@ -22,6 +21,7 @@ function usb_gadget_activate {
   ls /sys/class/udc > "${USB_DEVICE_PATH}/UDC"
   chmod 777 /dev/hidg0
   chmod 777 /dev/hidg1
+  chmod 777 /dev/hidg2
 }
 export -f usb_gadget_activate
 
