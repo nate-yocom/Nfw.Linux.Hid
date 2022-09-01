@@ -149,14 +149,57 @@ echo -ne \\xC0           # END_COLLECTION
 } >> "$D"
 cp "$D" "${USB_MOUSE_FUNCTIONS_DIR}/report_desc"
 
+
+# Joystick
+mkdir -p "$USB_JOYSTICK_FUNCTIONS_DIR"
+echo 0 > "${USB_JOYSTICK_FUNCTIONS_DIR}/protocol" 
+echo 0 > "${USB_JOYSTICK_FUNCTIONS_DIR}/subclass" 
+echo 11 > "${USB_JOYSTICK_FUNCTIONS_DIR}/report_length"
+
+# Write the report descriptor
+D=$(mktemp)
+{
+  echo -ne \\x05\\x01 # USAGE_PAGE (Generic Desktop)
+  echo -ne \\x09\\x05 # USAGE (Game Pad)
+  echo -ne \\xa1\\x01 # COLLECTION (Application)
+  echo -ne \\xa1\\x00 #    COLLECTION (Physical)
+  ##### \\x85\\x01  #        REPORT_ID (1)??
+  echo -ne \\x05\\x09 #        USAGE_PAGE (Button)
+  echo -ne \\x19\\x01 #        USAGE_MINIMUM (Button 1)
+  echo -ne \\x29\\x0B #        USAGE_MAXIMUM (Button 11)
+  echo -ne \\x15\\x00 #        LOGICAL_MINIMUM (0)
+  echo -ne \\x25\\x01 #        LOGICAL_MAXIMUM (1)
+  echo -ne \\x95\\x10 #        REPORT_COUNT (16)
+  echo -ne \\x75\\x01 #        REPORT_SIZE (1)
+  echo -ne \\x81\\x02 #        INPUT (Data,Var,Abs)
+  echo -ne \\x05\\x01 #        USAGE_PAGE (Generic Desktop)
+  echo -ne \\x09\\x30 #        USAGE (X)
+  echo -ne \\x09\\x31 #        USAGE (Y)
+  echo -ne \\x09\\x32 #        USAGE (Z)
+  echo -ne \\x09\\x33 #        USAGE (Rx)
+  echo -ne \\x09\\x34 #        USAGE (X)
+  echo -ne \\x09\\x35 #        USAGE (Y)
+  echo -ne \\x09\\x36 #        USAGE (Z)
+  echo -ne \\x09\\x37 #        USAGE (Rx)
+  echo -ne \\x09\\x38 #        USAGE (Rx)
+  echo -ne \\x15\\x81 #        LOGICAL_MINIMUM (-127)
+  echo -ne \\x25\\x7f #        LOGICAL_MAXIMUM (127)
+  echo -ne \\x75\\x08 #        REPORT_SIZE (8)
+  echo -ne \\x95\\x09 #        REPORT_COUNT (4)
+  echo -ne \\x81\\x02 #        INPUT (Data,Var,Abs)
+  echo -ne \\xc0      #    END COLLECTION
+  echo -ne \\xc0      # END COLLECTION
+} >> "$D"
+cp "$D" "${USB_JOYSTICK_FUNCTIONS_DIR}/report_desc"
+
 mkdir -p "${USB_CONFIG_DIR}"
 echo 250 > "${USB_CONFIG_DIR}/MaxPower"
 
 CONFIGS_STRINGS_DIR="${USB_CONFIG_DIR}/${USB_STRINGS_DIR}"
 mkdir -p "${CONFIGS_STRINGS_DIR}"
-echo "Config ${USB_CONFIG_INDEX}: ECM network" > "${CONFIGS_STRINGS_DIR}/configuration"
 
 ln -s "${USB_KEYBOARD_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
 ln -s "${USB_MOUSE_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
+ln -s "${USB_JOYSTICK_FUNCTIONS_DIR}" "${USB_CONFIG_DIR}/"
 
 usb_gadget_activate
