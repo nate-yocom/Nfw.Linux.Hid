@@ -1,8 +1,10 @@
 ﻿using Nfw.Linux.Hid.Keyboard;
 
-Console.WriteLine("Outputting \"test\" to keyboard on /dev/hidg0 in 5 seconds...");
+string hidDevice = args.Count() > 0 ? args[0] : "/dev/hidg0";
+
+Console.WriteLine($"Outputting \"test\" to keyboard on {hidDevice} in 5 seconds...");
 Thread.Sleep(5000);
 Console.WriteLine("... now");
 
-SimpleKeyboard keyboard = new SimpleKeyboard();
+SimpleKeyboard keyboard = new SimpleKeyboard(hidDevice);
 keyboard.EmitString("test");

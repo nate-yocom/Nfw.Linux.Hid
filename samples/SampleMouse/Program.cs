@@ -1,10 +1,12 @@
 ﻿using Nfw.Linux.Hid.Mouse;
 
-Console.WriteLine("Moving the mouse corner to corner in 5 seconds...");
+string hidDevice = args.Count() > 0 ? args[0] : "/dev/hidg1";
+
+Console.WriteLine($"Moving the mouse via {hidDevice} corner to corner in 5 seconds...");
 Thread.Sleep(5000);
 Console.WriteLine("... now");
 
-SimpleMouse mouse = new SimpleMouse();
+SimpleMouse mouse = new SimpleMouse(hidDevice);
 
 mouse.Center();
 

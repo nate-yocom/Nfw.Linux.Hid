@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\Nfw.Linux.Hid\Nfw.Linux.Hid.csproj" />
+    <ProjectReference Include="..\..\lib\Nfw.Linux.Hid.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
