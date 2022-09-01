@@ -36,6 +36,31 @@ for(int x = 0; x < SimpleMouse.MAX_X; x++) {
 
 Note additional methods for clicking, toggling (press-and-hold), etc are also available.
 
+## Sample: Joystick
+
+```csharp
+using Nfw.Linux.Hid.Joystick;
+
+string hidDevice = args.Count() > 0 ? args[0] : "/dev/hidg2";
+
+SimpleJoystick joystick = new SimpleJoystick(hidDevice);
+
+// First press them all one by one
+for (byte buttonId = 0; buttonId <= SimpleJoystick.MAX_BUTTON_ID; buttonId++) {
+    joystick.UpdateButton(buttonId, true);
+}
+
+// Now release them all one by one
+for (byte buttonId = 0; buttonId <= SimpleJoystick.MAX_BUTTON_ID; buttonId++) {
+    joystick.UpdateButton(buttonId, false);
+}
+
+// Press all the odd ones at the same time
+joystick.UpdateButtons(new byte[] { 1, 3, 5, 7, 9, 11, 13, 15 }, true);
+// And release them all at once
+joystick.UpdateButtons(new byte[] { 1, 3, 5, 7, 9, 11, 13, 15 }, false);
+```
+
 ## References
 - https://www.rmedgar.com/blog/using-rpi-zero-as-keyboard-setup-and-device-definition/
 - https://www.elinux.org/images/e/ef/USB_Gadget_Configfs_API_0.pdf
@@ -64,4 +89,6 @@ sudo ./init-usb-gadget.sh
 sudo ./install-usb-gadget.sh
 ```
 
-You should end up with /dev/hidg0 and /dev/hidg1 accordingly.
+You should end up with /dev/hidg0, hidg1, hidg2 accordingly.
+
+Note that the samples and code in this lib presume the use of the report descriptors from these scripts, i.e. a 8 byte keyboard report (2 status, 6 keys), a 7 byte mouse report, and an 11 byte joystick (16 buttons, 9 axis).
